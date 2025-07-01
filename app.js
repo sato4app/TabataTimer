@@ -97,7 +97,18 @@ document.addEventListener('DOMContentLoaded', function() {
     
     console.log('Parsed values:', { setupTime, workOutTime, intervalTime });
     
-    startTimer();
+    let totalTime = setupTime + workOutTime + intervalTime;
+    let countdownDisplay = document.getElementById('countdown-display');
+
+    let countdown = setInterval(function() {
+        if (totalTime <= 0) {
+            clearInterval(countdown);
+            countdownDisplay.textContent = "Time's up!";
+        } else {
+            countdownDisplay.textContent = totalTime + ' seconds remaining';
+            totalTime--;
+        }
+    }, 1000);
   });
 
   stopBtn.addEventListener('click', function() {
