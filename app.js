@@ -103,15 +103,4 @@ document.addEventListener('DOMContentLoaded', function() {
   stopBtn.addEventListener('click', function() {
     clearInterval(timerInterval);
   });
-
-  // イベントリスナーを追加
-  startBtn.addEventListener('click', function() {
-    console.log('Timer started');
-    startTimer();
-  });
-
-  stopBtn.addEventListener('click', function() {
-    clearInterval(timerInterval);
-  });
-  
 });
