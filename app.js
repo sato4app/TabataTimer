@@ -29,11 +29,22 @@ document.addEventListener('DOMContentLoaded', function() {
   let isFirstSetup = true;
 
   function startTimer() {
-    if (isFirstSetup) {
-      startSetupTimer();
-    } else {
-      startWorkOutTimer();
-    }
+    let setupTime = parseInt(document.getElementById('setup-time').value);
+    let workoutTime = parseInt(document.getElementById('workout-time').value);
+    let intervalTime = parseInt(document.getElementById('interval-time').value);
+
+    let totalTime = setupTime + workoutTime + intervalTime;
+    let countdownDisplay = document.getElementById('countdown-display');
+
+    let countdown = setInterval(function() {
+        if (totalTime <= 0) {
+            clearInterval(countdown);
+            countdownDisplay.textContent = "Time's up!";
+        } else {
+            countdownDisplay.textContent = totalTime + ' seconds remaining';
+            totalTime--;
+        }
+    }, 1000);
   }
 
   function startSetupTimer() {
@@ -86,29 +97,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // イベントリスナーを追加
   startBtn.addEventListener('click', function() {
-    console.log('Start button clicked');
-    console.log('Setup time input:', setupTimeInput);
-    console.log('Workout time input:', workOutTimeInput);
-    console.log('Interval time input:', intervalTimeInput);
-    
-    setupTime = parseInt(setupTimeInput.value);
-    workOutTime = parseInt(workOutTimeInput.value);
-    intervalTime = parseInt(intervalTimeInput.value);
-    
-    console.log('Parsed values:', { setupTime, workOutTime, intervalTime });
-    
-    let totalTime = setupTime + workOutTime + intervalTime;
-    let countdownDisplay = document.getElementById('countdown-display');
-
-    let countdown = setInterval(function() {
-        if (totalTime <= 0) {
-            clearInterval(countdown);
-            countdownDisplay.textContent = "Time's up!";
-        } else {
-            countdownDisplay.textContent = totalTime + ' seconds remaining';
-            totalTime--;
-        }
-    }, 1000);
+    console.log('Timer started');
+    startTimer();
   });
 
   stopBtn.addEventListener('click', function() {
