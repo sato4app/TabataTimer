@@ -5,6 +5,11 @@ document.addEventListener('DOMContentLoaded', function() {
   let startBtn = document.getElementById('start-btn');
   let stopBtn = document.getElementById('stop-btn');
 
+  // 初期値を設定
+  setupTimeInput.value = 3;
+  workOutTimeInput.value = 5;
+  intervalTimeInput.value = 4;
+
   // DOM要素が正しく取得できているか確認
   console.log('DOM elements:', {
     setupTimeInput,
@@ -21,9 +26,14 @@ document.addEventListener('DOMContentLoaded', function() {
   let numSets = 4;
   let currentSet = 0;
   let timerInterval;
+  let isFirstSetup = true;
 
   function startTimer() {
-    startSetupTimer();
+    if (isFirstSetup) {
+      startSetupTimer();
+    } else {
+      startWorkOutTimer();
+    }
   }
 
   function startSetupTimer() {
@@ -32,6 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
     timerInterval = setInterval(function() {
         if (time <= 0) {
             clearInterval(timerInterval);
+            isFirstSetup = false;
             startWorkOutTimer();
         } else {
             console.log(`Setup: ${time}s`);
@@ -46,12 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
     timerInterval = setInterval(function() {
         if (time <= 0) {
             clearInterval(timerInterval);
-            if (currentSet < numSets - 1) {
-                currentSet++;
-                startIntervalTimer();
-            } else {
-                console.log("Training Finished");
-            }
+            startIntervalTimer();
         } else {
             console.log(`WorkOut: ${time}s`);
             time--;
@@ -65,7 +71,12 @@ document.addEventListener('DOMContentLoaded', function() {
     timerInterval = setInterval(function() {
         if (time <= 0) {
             clearInterval(timerInterval);
-            startWorkOutTimer();
+            if (currentSet < numSets - 1) {
+                currentSet++;
+                startWorkOutTimer();
+            } else {
+                console.log("Training Finished");
+            }
         } else {
             console.log(`Interval: ${time}s`);
             time--;
