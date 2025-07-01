@@ -6,9 +6,9 @@ document.addEventListener('DOMContentLoaded', function() {
   let stopBtn = document.getElementById('stop-btn');
 
   // 初期値を設定
-  setupTimeInput.value = 3;
-  workOutTimeInput.value = 5;
-  intervalTimeInput.value = 4;
+  // setupTimeInput.value = 3;
+  // workOutTimeInput.value = 5;
+  // intervalTimeInput.value = 4;
 
   // DOM要素が正しく取得できているか確認
   console.log('DOM elements:', {
