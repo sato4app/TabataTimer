@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let countdown = setInterval(function() {
         if (totalTime <= 0) {
             clearInterval(countdown);
-            countdownDisplay.textContent = "Time's up!";
+            countdownDisplay.textContent = "Time's up";
         } else {
             countdownDisplay.textContent = totalTime + ' seconds remaining';
             totalTime--;
@@ -101,6 +101,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   stopBtn.addEventListener('click', function() {
+    console.log('Timer stopped');
     clearInterval(timerInterval);
   });
 });
