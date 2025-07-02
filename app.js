@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // タイマーを開始する関数
   // 各フェーズ（セットアップ、ワークアウト、休憩）を順にカウントダウンし、
-  // セットが完了するまで繰り返します。
+  // セットが完了するまで繰り返し
   function startTimer() {
     const setupTime = parseInt(document.getElementById('setup').value, 10);
     const workoutTime = parseInt(document.getElementById('workout').value, 10);
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     intervalTimeInput.value = timeLeft;
                     break;
             }
-            console.log(`Time left: ${timeLeft}`);
+            console.log(`Time left: ${timeLeft} in ${currentPhase}`);
         } else {
             // フェーズの切り替え
             switch (currentPhase) {
@@ -80,57 +80,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                     break;
             }
-        }
-    }, 1000);
-  }
-
-  // セットアップ時間をカウントダウンし、完了後にワークアウトフェーズを開始
-  function startSetupTimer() {
-    console.log('Starting setup timer with time:', setupTime);
-    let time = setupTime;
-    timerInterval = setInterval(function() {
-        if (time <= 0) {
-            clearInterval(timerInterval);
-            isFirstSetup = false;
-            startWorkOutTimer();
-        } else {
-            console.log(`Setup: ${time}s`);
-            time--;
-        }
-    }, 1000);
-  }
-
-  // ワークアウト時間をカウントダウンし、完了後に休憩フェーズを開始
-  function startWorkOutTimer() {
-    console.log(`Start WorkOut Set ${currentSet + 1}`);
-    let time = workOutTime;
-    timerInterval = setInterval(function() {
-        if (time <= 0) {
-            clearInterval(timerInterval);
-            startIntervalTimer();
-        } else {
-            console.log(`WorkOut: ${time}s`);
-            time--;
-        }
-    }, 1000);
-  }
-
-  // 休憩時間をカウントダウンし、完了後に次のワークアウトフェーズを開始
-  function startIntervalTimer() {
-    console.log(`Start Interval Set ${currentSet + 1}`);
-    let time = intervalTime;
-    timerInterval = setInterval(function() {
-        if (time <= 0) {
-            clearInterval(timerInterval);
-            if (currentSet < numSets - 1) {
-                currentSet++;
-                startWorkOutTimer();
-            } else {
-                console.log("Training Finished");
-            }
-        } else {
-            console.log(`Interval: ${time}s`);
-            time--;
         }
     }, 1000);
   }
