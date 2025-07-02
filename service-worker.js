@@ -1,49 +1,56 @@
 // Service Workerのバージョン
-const cacheName = 'tabata-timer-v1';
+const CACHE_NAME = 'tabata-timer-v0.1';
 
 // キャッシュするファイルのリスト
-const cacheFiles = [
+const urlsToCache = [
+  '/',
   '/index.html',
+  '/styles.css',
   '/app.js',
-  '/styles.css'
+  '/TimerIcon-192.png',
+  '/TimerIcon-512.png'
 ];
 
 // インストール時の処理
-self.addEventListener('install', function(e) {
+self.addEventListener('install', event => {
   console.log('Service Worker Installed');
   
-  e.waitUntil(
-    caches.open(cacheName).then(function(cache) {
-      console.log('Caching Files');
-      return cache.addAll(cacheFiles);
-    })
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => {
+        console.log('Caching Files');
+        return cache.addAll(urlsToCache);
+      })
   );
 });
 
 // アクティベート時の処理
-self.addEventListener('activate', function(e) {
+self.addEventListener('activate', event => {
   console.log('Service Worker Activated');
   
-  e.waitUntil(
-    caches.keys().then(function(cacheNames) {
-      return Promise.all(cacheNames.map(function(thisCacheName) {
-        // 古いキャッシュを削除
-        if (thisCacheName !== cacheName) {
-          console.log('Removing old cache');
-          return caches.delete(thisCacheName);
-        }
-      }));
+  const cacheWhitelist = [CACHE_NAME];
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cacheName => {
+          if (!cacheWhitelist.includes(cacheName)) {
+            console.log('Removing old cache');
+            return caches.delete(cacheName);
+          }
+        })
+      );
     })
   );
 });
 
 // リクエストのフェッチ時の処理
-self.addEventListener('fetch', function(e) {
-  console.log('Fetching', e.request.url);
+self.addEventListener('fetch', event => {
+  console.log('Fetching', event.request.url);
   
-  e.respondWith(
-    caches.match(e.request).then(function(response) {
-      return response || fetch(e.request);
-    })
+  event.respondWith(
+    caches.match(event.request)
+      .then(response => {
+        return response || fetch(event.request);
+      })
   );
 });

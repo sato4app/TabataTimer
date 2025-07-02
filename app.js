@@ -27,22 +27,42 @@ document.addEventListener('DOMContentLoaded', function() {
   let currentSet = 0;
   let timerInterval;
   let isFirstSetup = true;
+  let interval;
 
   function startTimer() {
-    let setupTime = parseInt(document.getElementById('setup-time').value);
-    let workoutTime = parseInt(document.getElementById('workout-time').value);
-    let intervalTime = parseInt(document.getElementById('interval-time').value);
+    const setupTime = parseInt(document.getElementById('setup').value, 10);
+    const workoutTime = parseInt(document.getElementById('workout').value, 10);
+    const restTime = parseInt(document.getElementById('rest').value, 10);
+    const setCount = parseInt(document.getElementById('set-count').value, 10);
 
-    let totalTime = setupTime + workoutTime + intervalTime;
-    let countdownDisplay = document.getElementById('countdown-display');
+    let currentSet = 0;
+    let currentPhase = 'setup';
+    let timeLeft = setupTime;
 
-    let countdown = setInterval(function() {
-        if (totalTime <= 0) {
-            clearInterval(countdown);
-            countdownDisplay.textContent = "Time's up";
+    interval = setInterval(() => {
+        if (timeLeft > 0) {
+            timeLeft--;
+            console.log(`Time left: ${timeLeft}`); // ここで画面に反映するロジックを追加できます
         } else {
-            countdownDisplay.textContent = totalTime + ' seconds remaining';
-            totalTime--;
+            switch (currentPhase) {
+                case 'setup':
+                    currentPhase = 'workout';
+                    timeLeft = workoutTime;
+                    break;
+                case 'workout':
+                    currentPhase = 'rest';
+                    timeLeft = restTime;
+                    break;
+                case 'rest':
+                    currentSet++;
+                    if (currentSet < setCount) {
+                        currentPhase = 'workout';
+                        timeLeft = workoutTime;
+                    } else {
+                        stopTimer();
+                    }
+                    break;
+            }
         }
     }, 1000);
   }
@@ -95,6 +115,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 1000);
   }
 
+  function stopTimer() {
+    clearInterval(interval);
+  }
+
   startBtn.addEventListener('click', function() {
     console.log('Timer started');
     startTimer();
@@ -102,6 +126,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   stopBtn.addEventListener('click', function() {
     console.log('Timer stopped');
-    clearInterval(timerInterval);
+    stopTimer();
   });
 });

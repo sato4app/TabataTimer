@@ -1,6 +1,6 @@
 {
-  "name": "Tabata-Timer",
-  "short_name": "TabataTimer",
+  "name": "Tabata Timer",
+  "short_name": "Tabata",
   "icons": [
     {
       "src": "TimerIcon-192.png",
@@ -15,8 +15,8 @@
   ],
   "start_url": "index.html",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#ffffff",
+  "background_color": "#f4f4f9",
+  "theme_color": "#007bff",
   "description": "A simple Tabata Timer.",
   "orientation": "portrait"
 }
