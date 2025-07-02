@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
+  // 各入力フィールドとボタンのDOM要素を取得
   let setupTimeInput = document.getElementById('setup');
   let workOutTimeInput = document.getElementById('workout');
   let intervalTimeInput = document.getElementById('rest');
@@ -14,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
     stopBtn
   });
 
+  // タイマーの設定値を取得
   let setupTime = parseInt(setupTimeInput.value);
   let workOutTime = parseInt(workOutTimeInput.value);
   let intervalTime = parseInt(intervalTimeInput.value);
@@ -24,6 +26,11 @@ document.addEventListener('DOMContentLoaded', function() {
   let isFirstSetup = true;
   let interval;
 
+  /**
+   * タイマーを開始する関数
+   * 各フェーズ（セットアップ、ワークアウト、休憩）を順にカウントダウンし、
+   * セットが完了するまで繰り返します。
+   */
   function startTimer() {
     const setupTime = parseInt(document.getElementById('setup').value, 10);
     const workoutTime = parseInt(document.getElementById('workout').value, 10);
@@ -34,11 +41,13 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentPhase = 'setup';
     let timeLeft = setupTime;
 
+    // タイマーのカウントダウンを開始
     interval = setInterval(() => {
         if (timeLeft > 0) {
             timeLeft--;
             console.log(`Time left: ${timeLeft}`); // ここで画面に反映するロジックを追加できます
         } else {
+            // フェーズの切り替え
             switch (currentPhase) {
                 case 'setup':
                     currentPhase = 'workout';
@@ -62,6 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 1000);
   }
 
+  // セットアップ時間をカウントダウンし、完了後にワークアウトフェーズを開始
   function startSetupTimer() {
     console.log('Starting setup timer with time:', setupTime);
     let time = setupTime;
@@ -77,6 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 1000);
   }
 
+  // ワークアウト時間をカウントダウンし、完了後に休憩フェーズを開始
   function startWorkOutTimer() {
     console.log(`Start WorkOut Set ${currentSet + 1}`);
     let time = workOutTime;
@@ -91,6 +102,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 1000);
   }
 
+  // 休憩時間をカウントダウンし、完了後に次のワークアウトフェーズを開始
   function startIntervalTimer() {
     console.log(`Start Interval Set ${currentSet + 1}`);
     let time = intervalTime;
@@ -110,15 +122,18 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 1000);
   }
 
+  // タイマーを停止: 現在のカウントダウンをクリア
   function stopTimer() {
     clearInterval(interval);
   }
 
+  // スタートボタンがクリックされたときにタイマーを開始
   startBtn.addEventListener('click', function() {
     console.log('Timer started');
     startTimer();
   });
 
+  // ストップボタンがクリックされたときにタイマーを停止
   stopBtn.addEventListener('click', function() {
     console.log('Timer stopped');
     stopTimer();
