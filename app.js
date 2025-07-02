@@ -7,11 +7,11 @@ document.addEventListener('DOMContentLoaded', function() {
   let startBtn = document.getElementById('start');
   let stopBtn = document.getElementById('stop');
 
-  // 初期値を保存
-  const initialSetupTime = setupTimeInput.value;
-  const initialWorkOutTime = workOutTimeInput.value;
-  const initialIntervalTime = intervalTimeInput.value;
-  const initialSetCount = setCountInput.value;
+  // 初期値を保存する変数
+  let initialSetupTime;
+  let initialWorkOutTime;
+  let initialIntervalTime;
+  let initialSetCount;
 
   // DOM要素が正しく取得できているか確認
   console.log('DOM elements:', {
@@ -103,6 +103,11 @@ document.addEventListener('DOMContentLoaded', function() {
   // スタートボタンがクリックされたときにタイマーを開始
   startBtn.addEventListener('click', function() {
     console.log('Timer started');
+    // 現在の値を初期値として保存
+    initialSetupTime = setupTimeInput.value;
+    initialWorkOutTime = workOutTimeInput.value;
+    initialIntervalTime = intervalTimeInput.value;
+    initialSetCount = setCountInput.value;
     startTimer();
   });
 
