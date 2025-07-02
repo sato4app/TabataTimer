@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
   let setupTimeInput = document.getElementById('setup');
   let workOutTimeInput = document.getElementById('workout');
   let intervalTimeInput = document.getElementById('rest');
+  let setCountInput = document.getElementById('set-count');
   let startBtn = document.getElementById('start');
   let stopBtn = document.getElementById('stop');
 
@@ -11,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setupTimeInput,
     workOutTimeInput,
     intervalTimeInput,
+    setCountInput,
     startBtn,
     stopBtn
   });
@@ -45,7 +47,19 @@ document.addEventListener('DOMContentLoaded', function() {
     interval = setInterval(() => {
         if (timeLeft > 0) {
             timeLeft--;
-            console.log(`Time left: ${timeLeft}`); // ここで画面に反映するロジックを追加できます
+            // 画面にカウントダウンの値を反映
+            switch (currentPhase) {
+                case 'setup':
+                    setupTimeInput.value = timeLeft;
+                    break;
+                case 'workout':
+                    workOutTimeInput.value = timeLeft;
+                    break;
+                case 'rest':
+                    intervalTimeInput.value = timeLeft;
+                    break;
+            }
+            console.log(`Time left: ${timeLeft}`);
         } else {
             // フェーズの切り替え
             switch (currentPhase) {
@@ -59,6 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     break;
                 case 'rest':
                     currentSet++;
+                    setCountInput.value = setCount - currentSet; // セット数を反映
                     if (currentSet < setCount) {
                         currentPhase = 'workout';
                         timeLeft = workoutTime;
