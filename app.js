@@ -1,14 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
-  let setupTimeInput = document.getElementById('setup-time');
-  let workOutTimeInput = document.getElementById('workout-time');
-  let intervalTimeInput = document.getElementById('interval-time');
-  let startBtn = document.getElementById('start-btn');
-  let stopBtn = document.getElementById('stop-btn');
-
-  // 初期値を設定
-  // setupTimeInput.value = 3;
-  // workOutTimeInput.value = 5;
-  // intervalTimeInput.value = 4;
+  let setupTimeInput = document.getElementById('setup');
+  let workOutTimeInput = document.getElementById('workout');
+  let intervalTimeInput = document.getElementById('rest');
+  let startBtn = document.getElementById('start');
+  let stopBtn = document.getElementById('stop');
 
   // DOM要素が正しく取得できているか確認
   console.log('DOM elements:', {
