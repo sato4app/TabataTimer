@@ -28,11 +28,9 @@ document.addEventListener('DOMContentLoaded', function() {
   let isFirstSetup = true;
   let interval;
 
-  /**
-   * タイマーを開始する関数
-   * 各フェーズ（セットアップ、ワークアウト、休憩）を順にカウントダウンし、
-   * セットが完了するまで繰り返します。
-   */
+  // タイマーを開始する関数
+  // 各フェーズ（セットアップ、ワークアウト、休憩）を順にカウントダウンし、
+  // セットが完了するまで繰り返します。
   function startTimer() {
     const setupTime = parseInt(document.getElementById('setup').value, 10);
     const workoutTime = parseInt(document.getElementById('workout').value, 10);
@@ -66,12 +64,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 case 'setup':
                     currentPhase = 'workout';
                     timeLeft = workoutTime;
-                    startWorkOutTimer();
                     break;
                 case 'workout':
                     currentPhase = 'rest';
                     timeLeft = restTime;
-                    startIntervalTimer();
                     break;
                 case 'rest':
                     currentSet++;
@@ -79,7 +75,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (currentSet < setCount) {
                         currentPhase = 'workout';
                         timeLeft = workoutTime;
-                        startWorkOutTimer();
                     } else {
                         stopTimer();
                     }
