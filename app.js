@@ -66,10 +66,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 case 'setup':
                     currentPhase = 'workout';
                     timeLeft = workoutTime;
+                    startWorkOutTimer();
                     break;
                 case 'workout':
                     currentPhase = 'rest';
                     timeLeft = restTime;
+                    startIntervalTimer();
                     break;
                 case 'rest':
                     currentSet++;
@@ -77,6 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (currentSet < setCount) {
                         currentPhase = 'workout';
                         timeLeft = workoutTime;
+                        startWorkOutTimer();
                     } else {
                         stopTimer();
                     }
