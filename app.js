@@ -7,6 +7,12 @@ document.addEventListener('DOMContentLoaded', function() {
   let startBtn = document.getElementById('start');
   let stopBtn = document.getElementById('stop');
 
+  // 初期値を保存
+  const initialSetupTime = setupTimeInput.value;
+  const initialWorkOutTime = workOutTimeInput.value;
+  const initialIntervalTime = intervalTimeInput.value;
+  const initialSetCount = setCountInput.value;
+
   // DOM要素が正しく取得できているか確認
   console.log('DOM elements:', {
     setupTimeInput,
@@ -84,9 +90,14 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 1000);
   }
 
-  // タイマーを停止: 現在のカウントダウンをクリア
+  // タイマーを停止: 現在のカウントダウンをクリアし、数値欄を初期値に戻す
   function stopTimer() {
     clearInterval(interval);
+    // 数値欄を初期値に戻す
+    setupTimeInput.value = initialSetupTime;
+    workOutTimeInput.value = initialWorkOutTime;
+    intervalTimeInput.value = initialIntervalTime;
+    setCountInput.value = initialSetCount;
   }
 
   // スタートボタンがクリックされたときにタイマーを開始
