@@ -1,86 +1,82 @@
 document.addEventListener('DOMContentLoaded', function() {
   // 各入力フィールドとボタンのDOM要素を取得
-  let setupTimeInput = document.getElementById('setup');
-  let workOutTimeInput = document.getElementById('workout');
-  let intervalTimeInput = document.getElementById('rest');
-  let setCountInput = document.getElementById('set-count');
-  let startBtn = document.getElementById('start');
-  let stopBtn = document.getElementById('stop');
+  const setupTimeInput = document.getElementById('setup');
+  const workOutTimeInput = document.getElementById('workout');
+  const intervalTimeInput = document.getElementById('rest');
+  const setCountInput = document.getElementById('set-count');
+  const startBtn = document.getElementById('start');
+  const stopBtn = document.getElementById('stop');
 
-  // 初期値を保存する変数
-  let initialSetupTime;
-  let initialWorkOutTime;
-  let initialIntervalTime;
-  let initialSetCount;
+  // タイマーの状態を管理するオブジェクト
+  const timerState = {
+    initialSettings: {
+      setup: 0,
+      workout: 0,
+      rest: 0,
+      setCount: 0,
+    },
+    currentPhase: 'idle', // 'idle', 'setup', 'workout', 'rest'
+    timeLeft: 0,
+    currentSet: 0,
+    intervalId: null,
+  };
 
   // DOM要素が正しく取得できているか確認
   console.log('DOM elements:', {
-    setupTimeInput,
-    workOutTimeInput,
-    intervalTimeInput,
-    setCountInput,
-    startBtn,
-    stopBtn
+    setupTimeInput, workOutTimeInput, intervalTimeInput, setCountInput, startBtn, stopBtn
   });
-
-  // タイマーの設定値を取得
-  let setupTime = parseInt(setupTimeInput.value);
-  let workOutTime = parseInt(workOutTimeInput.value);
-  let intervalTime = parseInt(intervalTimeInput.value);
-
-  let numSets = 4;
-  let currentSet = 0;
-  let timerInterval;
-  let isFirstSetup = true;
-  let interval;
 
   // タイマーを開始する関数
   // 各フェーズ（セットアップ、ワークアウト、休憩）を順にカウントダウンし、
   // セットが完了するまで繰り返し
   function startTimer() {
-    const setupTime = parseInt(document.getElementById('setup').value, 10);
-    const workoutTime = parseInt(document.getElementById('workout').value, 10);
-    const restTime = parseInt(document.getElementById('rest').value, 10);
-    const setCount = parseInt(document.getElementById('set-count').value, 10);
+    // 既にタイマーが動いていれば何もしない
+    if (timerState.intervalId) return;
 
-    let currentSet = 0;
-    let currentPhase = 'setup';
-    let timeLeft = setupTime;
+    timerState.currentSet = 0;
+    timerState.currentPhase = 'setup';
+    timerState.timeLeft = timerState.initialSettings.setup;
+
+    // 開始時の値をセット数に反映
+    setCountInput.value = timerState.initialSettings.setCount;
 
     // タイマーのカウントダウンを開始
-    interval = setInterval(() => {
-        if (timeLeft > 0) {
-            timeLeft--;
+    timerState.intervalId = setInterval(() => {
+        if (timerState.timeLeft > 0) {
+            timerState.timeLeft--;
             // 画面にカウントダウンの値を反映
-            switch (currentPhase) {
+            switch (timerState.currentPhase) {
                 case 'setup':
-                    setupTimeInput.value = timeLeft;
+                    setupTimeInput.value = timerState.timeLeft;
                     break;
                 case 'workout':
-                    workOutTimeInput.value = timeLeft;
+                    workOutTimeInput.value = timerState.timeLeft;
                     break;
                 case 'rest':
-                    intervalTimeInput.value = timeLeft;
+                    intervalTimeInput.value = timerState.timeLeft;
                     break;
             }
-            console.log(`Time left: ${timeLeft} in ${currentPhase}`);
+            console.log(`Time left: ${timerState.timeLeft} in ${timerState.currentPhase}`);
         } else {
+            // 時間が0になったら、各入力欄の表示を元に戻す
+            resetInputDisplays();
+
             // フェーズの切り替え
-            switch (currentPhase) {
+            switch (timerState.currentPhase) {
                 case 'setup':
-                    currentPhase = 'workout';
-                    timeLeft = workoutTime;
+                    timerState.currentPhase = 'workout';
+                    timerState.timeLeft = timerState.initialSettings.workout;
                     break;
                 case 'workout':
-                    currentPhase = 'rest';
-                    timeLeft = restTime;
+                    timerState.currentPhase = 'rest';
+                    timerState.timeLeft = timerState.initialSettings.rest;
                     break;
                 case 'rest':
-                    currentSet++;
-                    setCountInput.value = setCount - currentSet; // セット数を反映
-                    if (currentSet < setCount) {
-                        currentPhase = 'workout';
-                        timeLeft = workoutTime;
+                    timerState.currentSet++;
+                    setCountInput.value = timerState.initialSettings.setCount - timerState.currentSet;
+                    if (timerState.currentSet < timerState.initialSettings.setCount) {
+                        timerState.currentPhase = 'workout';
+                        timerState.timeLeft = timerState.initialSettings.workout;
                     } else {
                         stopTimer();
                     }
@@ -92,22 +88,28 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // タイマーを停止: 現在のカウントダウンをクリアし、数値欄を初期値に戻す
   function stopTimer() {
-    clearInterval(interval);
-    // 数値欄を初期値に戻す
-    setupTimeInput.value = initialSetupTime;
-    workOutTimeInput.value = initialWorkOutTime;
-    intervalTimeInput.value = initialIntervalTime;
-    setCountInput.value = initialSetCount;
+    clearInterval(timerState.intervalId);
+    timerState.intervalId = null;
+    timerState.currentPhase = 'idle';
+    resetInputDisplays();
+  }
+
+  // 入力欄の表示を初期設定値に戻す
+  function resetInputDisplays() {
+    setupTimeInput.value = timerState.initialSettings.setup;
+    workOutTimeInput.value = timerState.initialSettings.workout;
+    intervalTimeInput.value = timerState.initialSettings.rest;
+    setCountInput.value = timerState.initialSettings.setCount;
   }
 
   // スタートボタンがクリックされたときにタイマーを開始
   startBtn.addEventListener('click', function() {
     console.log('Timer started');
-    // 現在の値を初期値として保存
-    initialSetupTime = setupTimeInput.value;
-    initialWorkOutTime = workOutTimeInput.value;
-    initialIntervalTime = intervalTimeInput.value;
-    initialSetCount = setCountInput.value;
+    // 現在の入力値を初期設定として保存
+    timerState.initialSettings.setup = parseInt(setupTimeInput.value, 10);
+    timerState.initialSettings.workout = parseInt(workOutTimeInput.value, 10);
+    timerState.initialSettings.rest = parseInt(intervalTimeInput.value, 10);
+    timerState.initialSettings.setCount = parseInt(setCountInput.value, 10);
     startTimer();
   });
 
