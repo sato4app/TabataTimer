@@ -1,22 +1,21 @@
 {
-  "name": "Tabata Timer",
-  "short_name": "Tabata",
+  "short_name": "タバタ",
+  "name": "タバタタイマー",
   "icons": [
     {
-      "src": "TimerIcon-192.png",
+      "src": "icon-192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "TimerIcon-512.png",
+      "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
   ],
-  "start_url": "index.html",
+  "start_url": ".",
   "display": "standalone",
-  "background_color": "#f4f4f9",
-  "theme_color": "#007bff",
-  "description": "A simple Tabata Timer.",
-  "orientation": "portrait"
-}
+  "theme_color": "#4F46E5",
+  "background_color": "#FFFFFF",
+  "lang": "ja"
+} 
