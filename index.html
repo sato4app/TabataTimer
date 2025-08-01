@@ -117,11 +117,23 @@
             const startTimer = () => {
                 // Only start if not already running and not in '完了' phase
                 if (!isRunning && phase !== '完了') {
+                    // Ensure all settings have valid values before starting
+                    const validPrepareDuration = customPrepareDuration === '' ? DEFAULT_PREPARE_DURATION : customPrepareDuration || DEFAULT_PREPARE_DURATION;
+                    const validWorkDuration = customWorkDuration === '' ? DEFAULT_WORK_DURATION : customWorkDuration || DEFAULT_WORK_DURATION;
+                    const validRestDuration = customRestDuration === '' ? DEFAULT_REST_DURATION : customRestDuration || DEFAULT_REST_DURATION;
+                    const validTotalRounds = customTotalRounds === '' ? DEFAULT_TOTAL_ROUNDS : customTotalRounds || DEFAULT_TOTAL_ROUNDS;
+                    
+                    // Update state with valid values
+                    setCustomPrepareDuration(validPrepareDuration);
+                    setCustomWorkDuration(validWorkDuration);
+                    setCustomRestDuration(validRestDuration);
+                    setCustomTotalRounds(validTotalRounds);
+                    
                     setIsRunning(true);
                     setIsInitialLoad(false); // No longer initial load
-                    // If starting from '準備' phase, set time to custom prepare duration
+                    // If starting from '準備' phase, set time to valid prepare duration
                     if (phase === '準備' && (time === 0 || isInitialLoad)) {
-                        setTime(customPrepareDuration);
+                        setTime(validPrepareDuration);
                     }
                 }
             };
@@ -167,8 +179,15 @@
 
             // Handle input change for custom durations/rounds
             const handleSettingChange = (setter, value, minValue = 1) => {
-                const numValue = Math.max(minValue, parseInt(value, 10) || minValue); // Ensure positive integer
-                setter(numValue);
+                // Allow empty string for user input, otherwise ensure positive integer
+                if (value === '') {
+                    setter('');
+                } else {
+                    const numValue = parseInt(value, 10);
+                    if (!isNaN(numValue) && numValue >= minValue) {
+                        setter(numValue);
+                    }
+                }
             };
 
             return React.createElement('div', {
