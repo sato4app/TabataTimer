@@ -1,9 +1,10 @@
-const CACHE_NAME = 'tabata-timer-cache-v1';
+const CACHE_NAME = 'tabata-timer-cache-v2';
 const urlsToCache = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/styles.css',
+  '/icon-192.png',
+  '/icon-512.png'
 ];
 
 self.addEventListener('install', event => {
