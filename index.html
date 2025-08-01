@@ -64,13 +64,33 @@
                 oscillator.stop(audioContextRef.current.currentTime + duration);
             }, []);
 
+            // Function to play countdown beeps (5, 4, 3, 2, 1)
+            const playCountdownBeep = useCallback((remainingSeconds) => {
+                if (remainingSeconds >= 1 && remainingSeconds <= 5) {
+                    // Higher frequency for countdown (more urgent sound)
+                    playBeep(800, 0.2);
+                }
+            }, [playBeep]);
+
             // Effect hook for timer logic
             useEffect(() => {
                 // Only run timer logic if it's running and there's time left
                 if (isRunning && time > 0) {
+                    // Play countdown beeps for the last 5 seconds of each phase
+                    if (time <= 5 && time > 0) {
+                        playCountdownBeep(time);
+                    }
+                    
                     // Set up the interval timer
                     timerRef.current = setInterval(() => {
-                        setTime((prevTime) => prevTime - 1);
+                        setTime((prevTime) => {
+                            const newTime = prevTime - 1;
+                            // Play countdown beep for the next second
+                            if (newTime <= 5 && newTime > 0) {
+                                setTimeout(() => playCountdownBeep(newTime), 50); // Small delay to sync with visual
+                            }
+                            return newTime;
+                        });
                     }, 1000);
                 } else if (isRunning && time === 0) {
                     // Clear the current interval when time runs out
@@ -111,7 +131,7 @@
                         clearInterval(timerRef.current);
                     }
                 };
-            }, [isRunning, time, phase, round, playBeep, customWorkDuration, customRestDuration, customTotalRounds]);
+            }, [isRunning, time, phase, round, playBeep, playCountdownBeep, customWorkDuration, customRestDuration, customTotalRounds]);
 
             // Function to start the timer
             const startTimer = () => {
